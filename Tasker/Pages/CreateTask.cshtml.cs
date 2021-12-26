@@ -5,14 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Tasker.Pages
 {
-    public class CreateTask : PageModel
+    public class CreateTaskModel : PageModel
     {
-        private readonly ILogger<CreateTask> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public CreateTask(ILogger<CreateTask> logger)
+        public CreateTaskModel(ApplicationDbContext context)
         {
-            _logger = logger;
-            _logger.LogInformation("The Name of Type : {TypeName}", this.GetType().FullName);
+            _context = context;
         }
         
         [BindProperty]
@@ -25,6 +24,8 @@ namespace Tasker.Pages
 
         public IActionResult OnPost()
         {
+            _context.Tasks.Add(NewTask);
+            _context.SaveChanges();
             return RedirectToPage("Index");
         }
     }
